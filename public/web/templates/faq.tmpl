@@ -1,0 +1,27 @@
+{{ define "faq" }}
+    {{ template "header" . }}
+    {{ template "nav" . }}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <br><br>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <p><strong>Q.</strong>  Not all the anime I finished this year is showing up?</p>
+                        <p><strong>A.</strong>  You must ensure you have a "Finish Date" on your anime.  When updating an anime on your list go to the details section and fill out the date.</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p><strong>Q.</strong>  I updated my list, how can I refresh my leaderboard ranking?</p>
+                        <p><strong>A.</strong>  Simply search your username on the homepage and your ranking will update automatically.</p>
+                    </li>
+                    <li class="list-group-item">
+                        <p><strong>Q.</strong>  I have anime marked as completed this year but nothing at all shows up?</p>
+                        <p><strong>A.</strong>  Your anime list is likely private, we can only gather information from public lists.</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {{ template "footer" . }}
+{{ end }}

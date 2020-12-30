@@ -1,0 +1,31 @@
+{{ define "about" }}
+    {{ template "header" . }}
+    {{ template "nav" . }}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <br><br>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <p>This site is provided free of charge and does not utilize adds or other monetization methods</p>
+                        <p>To get in touch with the site creator please submit questions with the form below</p>
+                    </li>
+                </ul>
+                <form action="/form/question" method="post">
+                    <div class="form-group">
+                        <label for="email">Your Email</label>
+                        <input type="email" class="form-control" id="email" name="Email" aria-describedby="emailHelp" placeholder="Enter email" required>
+                        <small id="emailHelp" class="form-text text-muted">We will not share this, it will only be used to contact you regarding your inquiry.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="question">Question</label>
+                        <textarea class="form-control" name="Question" id="question" rows="9"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-primary">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{ template "footer" . }}
+{{ end }}

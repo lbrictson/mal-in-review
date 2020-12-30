@@ -1,0 +1,28 @@
+{{ define "index" }}
+{{ template "header" . }}
+{{ template "nav" . }}
+<div class="container">
+    <div class="row">
+        <div class="col-md">
+        </div>
+        <div class="col-md">
+            <br><br>
+            <div class="container">
+            <h2>Your Anime List</h2>
+                <h3>A Year in Review</h3>
+            <form action="/form/single" method="post">
+                <div class="form-group">
+                    <label for="#username">Username</label>
+                    <input type="text" class="form-control" id="username" name="Username" aria-describedby="usernameHelp" placeholder="Enter MAL Username" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Generate Review</button>
+            </form>
+            </div>
+        </div>
+        <div class="col-md">
+        </div>
+    </div>
+</div>
+
+{{ template "footer" . }}
+{{ end }}

@@ -1,0 +1,178 @@
+{{ define "double" }}
+    {{ template "header" . }}
+    {{ template "nav" . }}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 style="display: inline-block;">{{ .user }} (<a href="/leaderboard">Ranked #{{ .Rank }}</a>) vs {{ .user2 }} (<a href="/leaderboard">Ranked #{{ .Rank2 }}</a>)
+                </h1>
+                <button type="button" style="margin-top: 7px;" class="btn btn-primary float-right pull-right" data-toggle="modal" data-target="#explainModal">
+                    How it Works
+                </button>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="explainModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">How it Works</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Only completed anime you set a finished date on is counted<br><br>
+                            Anime you are currently watching but have not finished still count towards your totals<br><br>
+                            Your top anime are gathered from ones you have scored and completed, currently watching is excluded
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Got it</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm">
+                        <p>{{ .user }} Movies watched: {{ .movieWatched }}</p>
+                        <p>{{ .user2 }} Movies watched: {{ .movieWatched2 }}</p>
+                    </div>
+                    <div class="col-sm">
+                        <p>{{ .user }} Episodes watched: {{ .sumTV }} ({{ .TVWatched }} shows)</p>
+                        <p>{{ .user2 }} Episodes watched: {{ .sumTV2 }} ({{ .TVWatched2 }} shows)</p>
+                    </div>
+                    <div class="col-sm">
+                        <p>{{ .user }} OVAs watched: {{ .sumOVA }} ({{ .OVAWatched }} OVAs/ONAs)</p>
+                        <p>{{ .user2 }} OVAs watched: {{ .sumOVA2 }} ({{ .OVAWatched2 }} OVAs/ONAs)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm">
+                <div class="chart-container" style="position: relative;" width="400" height="400">
+                    <canvas id="movies"></canvas>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="chart-container" style="position: relative;" width="400" height="400">
+                    <canvas id="episodes"></canvas>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="chart-container" style="position: relative;" width="400" height="400">
+                    <canvas id="ovas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ template "footer" . }}
+    <script>
+        var ctx = document.getElementById('movies').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: '{{ .user }} Movies Watched',
+                    data: [{{ .history.JanMovies }}, {{ .history.FebMovies }}, {{ .history.MarchMovies }}, {{ .history.AprilMovies }}, {{ .history.MayMovies }}, {{ .history.JuneMovies }}, {{ .history.JulyMovies }}, {{ .history.AugustMovies }} ,{{ .history.SeptemberMovies }} ,{{ .history.OctoberMovies }}, {{ .history.NovemberMovies }}, {{ .history.DecemberMovies }}],
+                    borderWidth: 1,
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                },
+                    {
+                        label: '{{ .user2 }} Movies Watched',
+                        data: [{{ .history2.JanMovies }}, {{ .history2.FebMovies }}, {{ .history2.MarchMovies }}, {{ .history2.AprilMovies }}, {{ .history2.MayMovies }}, {{ .history2.JuneMovies }}, {{ .history2.JulyMovies }}, {{ .history2.AugustMovies }} ,{{ .history2.SeptemberMovies }} ,{{ .history2.OctoberMovies }}, {{ .history2.NovemberMovies }}, {{ .history2.DecemberMovies }}],
+                        borderWidth: 1,
+                        backgroundColor: 'rgb(0, 0, 255)',
+                        borderColor: 'rgb(0, 0, 255)',
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+    <script>
+        var ctx = document.getElementById('episodes').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: '{{ .user }} Episodes Watched',
+                    data: [{{ .history.JanTV}}, {{ .history.FebTV }}, {{ .history.MarchTV }}, {{ .history.AprilTV }}, {{ .history.MayTV }}, {{ .history.JuneTV }}, {{ .history.JulyTV }}, {{ .history.AugustTV }} ,{{ .history.SeptemberTV }} ,{{ .history.OctoberTV }}, {{ .history.NovemberTV }}, {{ .history.DecemberTV }}],
+                    borderWidth: 1,
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                },
+                    {
+                        label: '{{ .user2 }} Episodes Watched',
+                        data: [{{ .history2.JanTV}}, {{ .history2.FebTV }}, {{ .history2.MarchTV }}, {{ .history2.AprilTV }}, {{ .history2.MayTV }}, {{ .history2.JuneTV }}, {{ .history2.JulyTV }}, {{ .history2.AugustTV }} ,{{ .history2.SeptemberTV }} ,{{ .history2.OctoberTV }}, {{ .history2.NovemberTV }}, {{ .history2.DecemberTV }}],
+                        borderWidth: 1,
+                        backgroundColor: 'rgb(0, 0, 255)',
+                        borderColor: 'rgb(0, 0, 255)',
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+    <script>
+        var ctx = document.getElementById('ovas').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: '{{ .user }} OVAs Watched',
+                    data: [{{ .history.JanOVA}}, {{ .history.FebOVA }}, {{ .history.MarchOVA }}, {{ .history.AprilOVA }}, {{ .history.MayOVA }}, {{ .history.JuneOVA }}, {{ .history.JulyOVA }}, {{ .history.AugustOVA }} ,{{ .history.SeptemberOVA }} ,{{ .history.OctoberOVA }}, {{ .history.NovemberOVA }}, {{ .history.DecemberOVA }}],
+                    borderWidth: 1,
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                },
+                {
+                    label: '{{ .user2 }} OVAs Watched',
+                    data: [{{ .history2.JanOVA}}, {{ .history2.FebOVA }}, {{ .history2.MarchOVA }}, {{ .history2.AprilOVA }}, {{ .history2.MayOVA }}, {{ .history2.JuneOVA }}, {{ .history2.JulyOVA }}, {{ .history2.AugustOVA }} ,{{ .history2.SeptemberOVA }} ,{{ .history2.OctoberOVA }}, {{ .history2.NovemberOVA }}, {{ .history2.DecemberOVA }}],
+                    borderWidth: 1,
+                    backgroundColor: 'rgb(0, 0, 255)',
+                    borderColor: 'rgb(0, 0, 255)',
+                }
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+{{ end }}

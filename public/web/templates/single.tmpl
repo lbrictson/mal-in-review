@@ -1,0 +1,217 @@
+{{ define "single" }}
+    {{ template "header" . }}
+    {{ template "nav" . }}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1 style="display: inline-block;">{{ .user }} Year in Review (<a href="/leaderboard">Ranked #{{ .Rank }}</a>)
+                </h1>
+                <button type="button" style="margin-top: 7px;" class="btn btn-primary float-right pull-right" data-toggle="modal" data-target="#explainModal">
+                    How it Works
+                </button>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="explainModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">How it Works</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Only completed anime you set a finished date on is counted<br><br>
+                            Anime you are currently watching but have not finished still count towards your totals<br><br>
+                            Your top anime are gathered from ones you have scored and completed, currently watching is excluded
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Got it</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="container-fluid">
+        <div class="row">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm">
+                    <p>Movies watched: {{ .movieWatched }}</p>
+                </div>
+                <div class="col-sm">
+                    <p>Episodes watched: {{ .sumTV }} ({{ .TVWatched }} shows)</p>
+                </div>
+                <div class="col-sm">
+                    <p>OVAs watched: {{ .sumOVA }} ({{ .OVAWatched }} OVAs/ONAs)</p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm">
+                <div class="chart-container" style="position: relative;" width="400" height="400">
+                    <canvas id="movies"></canvas>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="chart-container" style="position: relative;" width="400" height="400">
+                    <canvas id="episodes"></canvas>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="chart-container" style="position: relative;" width="400" height="400">
+                    <canvas id="ovas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm">
+                <h3>Your Top 5 Rated Movies</h3>
+                <table class="table table-bordered table-sm">
+                    <thead>
+                    <tr class="table-primary">
+                        <th scope="col">Score</th>
+                        <th scope="col"></th>
+                        <th scope="col">Title</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{ range .topMovie }}
+                        <tr>
+                            <th scope="row">{{ .Score }}</th>
+                            <td><img src="{{ .AnimeImagePath }}" alt="{{ .AnimeTitle }}"></td>
+                            <td><a href="https://myanimelist.net/anime/{{ .AnimeID }}" target="_blank">{{ .AnimeTitle }}</a></td>
+                        </tr>
+                    {{ end }}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <h3>Your Top 5 Rated Shows</h3>
+                <table class="table table-bordered table-sm">
+                    <thead>
+                    <tr class="table-primary">
+                        <th scope="col">Score</th>
+                        <th scope="col"></th>
+                        <th scope="col">Title</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{ range .topTV }}
+                        <tr>
+                            <th scope="row">{{ .Score }}</th>
+                            <td><img src="{{ .AnimeImagePath }}" alt="{{ .AnimeTitle }}"></td>
+                            <td><a href="https://myanimelist.net/anime/{{ .AnimeID }}" target="_blank">{{ .AnimeTitle }}</a></td>
+                        </tr>
+                    {{ end }}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm">
+                <h3>Your Top 5 Rated OVAs</h3>
+                <table class="table table-bordered table-sm">
+                    <thead>
+                    <tr class="table-primary">
+                        <th scope="col">Score</th>
+                        <th scope="col"></th>
+                        <th scope="col">Title</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{ range .topOVA }}
+                        <tr>
+                            <th scope="row">{{ .Score }}</th>
+                            <td><img src="{{ .AnimeImagePath }}" alt="{{ .AnimeTitle }}"></td>
+                            <td><a href="https://myanimelist.net/anime/{{ .AnimeID }}" target="_blank">{{ .AnimeTitle }}</a></td>
+                        </tr>
+                    {{ end }}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {{ template "footer" . }}
+    <script>
+        var ctx = document.getElementById('movies').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Movies Watched',
+                    data: [{{ .history.JanMovies }}, {{ .history.FebMovies }}, {{ .history.MarchMovies }}, {{ .history.AprilMovies }}, {{ .history.MayMovies }}, {{ .history.JuneMovies }}, {{ .history.JulyMovies }}, {{ .history.AugustMovies }} ,{{ .history.SeptemberMovies }} ,{{ .history.OctoberMovies }}, {{ .history.NovemberMovies }}, {{ .history.DecemberMovies }}],
+                    borderWidth: 1,
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+    <script>
+        var ctx = document.getElementById('episodes').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Episodes Watched',
+                    data: [{{ .history.JanTV}}, {{ .history.FebTV }}, {{ .history.MarchTV }}, {{ .history.AprilTV }}, {{ .history.MayTV }}, {{ .history.JuneTV }}, {{ .history.JulyTV }}, {{ .history.AugustTV }} ,{{ .history.SeptemberTV }} ,{{ .history.OctoberTV }}, {{ .history.NovemberTV }}, {{ .history.DecemberTV }}],
+                    borderWidth: 1,
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+    <script>
+        var ctx = document.getElementById('ovas').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'OVAs Watched',
+                    data: [{{ .history.JanOVA}}, {{ .history.FebOVA }}, {{ .history.MarchOVA }}, {{ .history.AprilOVA }}, {{ .history.MayOVA }}, {{ .history.JuneOVA }}, {{ .history.JulyOVA }}, {{ .history.AugustOVA }} ,{{ .history.SeptemberOVA }} ,{{ .history.OctoberOVA }}, {{ .history.NovemberOVA }}, {{ .history.DecemberOVA }}],
+                    borderWidth: 1,
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+{{ end }}
