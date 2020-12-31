@@ -55,6 +55,9 @@ func battleResults(c echo.Context) error {
 		"topOVA":        stats.TopOVA,
 		"topMovie":      stats.TopMovie,
 		"Rank":          stats.Rank,
+		"rawOVA":        stats.RawOVA,
+		"rawMovie":      stats.RawMovie,
+		"rawTV":         stats.RawTV,
 		"user2":         username2,
 		"sumMovie2":     stats2.SumMovie,
 		"sumTV2":        stats2.SumTV,
@@ -67,5 +70,8 @@ func battleResults(c echo.Context) error {
 		"topOVA2":       stats2.TopOVA,
 		"topMovie2":     stats2.TopMovie,
 		"Rank2":         stats2.Rank,
+		"rawOVA2":       stats2.RawOVA,
+		"rawMovie2":     stats2.RawMovie,
+		"rawTV2":        stats2.RawTV,
 	})
 }

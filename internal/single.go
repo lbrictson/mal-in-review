@@ -86,5 +86,8 @@ func singleUserView(c echo.Context) error {
 		"topOVA":       stats.TopOVA,
 		"topMovie":     stats.TopMovie,
 		"Rank":         stats.Rank,
+		"rawOVA":       stats.RawOVA,
+		"rawMovie":     stats.RawMovie,
+		"rawTV":        stats.RawTV,
 	})
 }

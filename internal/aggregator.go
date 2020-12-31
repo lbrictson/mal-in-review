@@ -19,6 +19,31 @@ type UserStats struct {
 	Username     string
 	Rank         int
 	Minutes      int
+	RawOVA       []OVA
+	RawTV        []TV
+	RawMovie     []Movie
+}
+
+type Movie struct {
+	Title     string
+	ImageLink string
+	AnimeID   int
+}
+
+type TV struct {
+	Title           string
+	ImageLink       string
+	TotalEpisodes   int
+	WatchedEpisodes int
+	AnimeID         int
+}
+
+type OVA struct {
+	Title           string
+	ImageLink       string
+	TotalEpisodes   int
+	WatchedEpisodes int
+	AnimeID         int
 }
 
 func generateUserStats(username string, data UserData) UserStats {
@@ -37,7 +62,9 @@ func generateUserStats(username string, data UserData) UserStats {
 			break
 		}
 		if x.AnimeMediaTypeString == "Movie" {
-			movies = append(movies, x)
+			if x.Score != 0 {
+				movies = append(movies, x)
+			}
 		}
 	}
 	for _, x := range data.Finished {
@@ -45,7 +72,9 @@ func generateUserStats(username string, data UserData) UserStats {
 			break
 		}
 		if x.AnimeMediaTypeString == "TV" {
-			tvs = append(tvs, x)
+			if x.Score != 0 {
+				tvs = append(tvs, x)
+			}
 		}
 	}
 	for _, x := range data.Finished {
@@ -53,10 +82,14 @@ func generateUserStats(username string, data UserData) UserStats {
 			break
 		}
 		if x.AnimeMediaTypeString == "OVA" {
-			ovas = append(ovas, x)
+			if x.Score != 0 {
+				ovas = append(ovas, x)
+			}
 		}
 		if x.AnimeMediaTypeString == "ONA" {
-			ovas = append(ovas, x)
+			if x.Score != 0 {
+				ovas = append(ovas, x)
+			}
 		}
 	}
 	sumOVA := 0
@@ -65,6 +98,9 @@ func generateUserStats(username string, data UserData) UserStats {
 	TVWatched := 0
 	OVAWatched := 0
 	MovieWatched := 0
+	rawMovie := []Movie{}
+	rawTV := []TV{}
+	rawOVA := []OVA{}
 	for _, x := range data.Finished {
 		switch x.AnimeMediaTypeString {
 		case "TV":
@@ -196,24 +232,100 @@ func generateUserStats(username string, data UserData) UserStats {
 	for _, x := range data.Finished {
 		switch x.AnimeMediaTypeString {
 		case "TV":
+			totalEps := x.AnimeNumEpisodes
+			if totalEps == 0 {
+				totalEps = x.NumWatchedEpisodes
+			}
+			rawTV = append(rawTV, TV{
+				Title:           x.AnimeTitle,
+				ImageLink:       x.AnimeImagePath,
+				TotalEpisodes:   totalEps,
+				WatchedEpisodes: x.NumWatchedEpisodes,
+				AnimeID:         x.AnimeID,
+			})
 			sumTV = sumTV + x.NumWatchedEpisodes
 		case "OVA":
+			totalEps := x.AnimeNumEpisodes
+			if totalEps == 0 {
+				totalEps = x.NumWatchedEpisodes
+			}
+			rawOVA = append(rawOVA, OVA{
+				Title:           x.AnimeTitle,
+				ImageLink:       x.AnimeImagePath,
+				TotalEpisodes:   totalEps,
+				WatchedEpisodes: x.NumWatchedEpisodes,
+				AnimeID:         x.AnimeID,
+			})
 			sumOVA = sumOVA + x.NumWatchedEpisodes
 		case "Movie":
+			rawMovie = append(rawMovie, Movie{
+				Title:     x.AnimeTitle,
+				ImageLink: x.AnimeImagePath,
+				AnimeID:   x.AnimeID,
+			})
 			sumMovie = sumMovie + x.NumWatchedEpisodes
 		case "ONA":
+			totalEps := x.AnimeNumEpisodes
+			if totalEps == 0 {
+				totalEps = x.NumWatchedEpisodes
+			}
+			rawOVA = append(rawOVA, OVA{
+				Title:           x.AnimeTitle,
+				ImageLink:       x.AnimeImagePath,
+				TotalEpisodes:   totalEps,
+				WatchedEpisodes: x.NumWatchedEpisodes,
+				AnimeID:         x.AnimeID,
+			})
 			sumOVA = sumOVA + x.NumWatchedEpisodes
 		}
 	}
 	for _, x := range data.Current {
 		switch x.AnimeMediaTypeString {
 		case "TV":
+			totalEps := x.AnimeNumEpisodes
+			if totalEps == 0 {
+				totalEps = x.NumWatchedEpisodes
+			}
+			rawTV = append(rawTV, TV{
+				Title:           x.AnimeTitle,
+				ImageLink:       x.AnimeImagePath,
+				TotalEpisodes:   totalEps,
+				WatchedEpisodes: x.NumWatchedEpisodes,
+				AnimeID:         x.AnimeID,
+			})
 			sumTV = sumTV + x.NumWatchedEpisodes
 		case "OVA":
+			totalEps := x.AnimeNumEpisodes
+			if totalEps == 0 {
+				totalEps = x.NumWatchedEpisodes
+			}
+			rawOVA = append(rawOVA, OVA{
+				Title:           x.AnimeTitle,
+				ImageLink:       x.AnimeImagePath,
+				TotalEpisodes:   totalEps,
+				WatchedEpisodes: x.NumWatchedEpisodes,
+				AnimeID:         x.AnimeID,
+			})
 			sumOVA = sumOVA + x.NumWatchedEpisodes
 		case "Movie":
+			rawMovie = append(rawMovie, Movie{
+				Title:     x.AnimeTitle,
+				ImageLink: x.AnimeImagePath,
+				AnimeID:   x.AnimeID,
+			})
 			sumMovie = sumMovie + x.NumWatchedEpisodes
 		case "ONA":
+			totalEps := x.AnimeNumEpisodes
+			if totalEps == 0 {
+				totalEps = x.NumWatchedEpisodes
+			}
+			rawOVA = append(rawOVA, OVA{
+				Title:           x.AnimeTitle,
+				ImageLink:       x.AnimeImagePath,
+				TotalEpisodes:   totalEps,
+				WatchedEpisodes: x.NumWatchedEpisodes,
+				AnimeID:         x.AnimeID,
+			})
 			sumOVA = sumOVA + x.NumWatchedEpisodes
 		}
 	}
@@ -227,6 +339,9 @@ func generateUserStats(username string, data UserData) UserStats {
 	u.SumMovie = sumMovie
 	u.TopMovie = movies
 	u.History = history
+	u.RawTV = rawTV
+	u.RawMovie = rawMovie
+	u.RawOVA = rawOVA
 	score := 0
 	score = score + (sumMovie * 140)
 	score = score + (sumOVA * 24)
@@ -236,7 +351,9 @@ func generateUserStats(username string, data UserData) UserStats {
 		Username: username,
 		Score:    score,
 	}
-	l.Store()
-	u.Rank = getRank(u.Username)
+	if u.Minutes != 0 {
+		l.Store()
+		u.Rank = getRank(u.Username)
+	}
 	return u
 }

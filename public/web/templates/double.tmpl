@@ -25,11 +25,189 @@
                         <p>
                             Only completed anime you set a finished date on is counted<br><br>
                             Anime you are currently watching but have not finished still count towards your totals<br><br>
-                            Your top anime are gathered from ones you have scored and completed, currently watching is excluded
+                            Your top anime are gathered from ones you have scored and completed, currently watching is excluded<br><br>
+                            Only completed anime is graphed on the monthly graphs - in progress ones are skipped
                         </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Got it</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="{{ .user }}moviemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ .user }} Movies Watched This Year</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                            {{ range .rawMovie }}
+                                <tr>
+                                    <td><img src="{{ .ImageLink }}" alt="{{ .Title }}"></td>
+                                    <td><a href="https://myanimelist.net/anime/{{ .AnimeID }}" target="_blank">{{ .Title }}</a></td>
+                                </tr>
+                            {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="{{ .user }}tvmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ .user }} Shows Watched This Year</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                            {{ range .rawTV }}
+                                <tr>
+                                    <td><img src="{{ .ImageLink }}" alt="{{ .Title }}"></td>
+                                    <td><a href="https://myanimelist.net/anime/{{ .AnimeID }}" target="_blank">{{ .Title }}</a></td>
+                                    <td>{{ .WatchedEpisodes }}/{{ .TotalEpisodes }}</td>
+                                </tr>
+                            {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="{{ .user }}ovamodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ .user }} OVAs Watched This Year</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                            {{ range .rawOVA }}
+                                <tr>
+                                    <td><img src="{{ .ImageLink }}" alt="{{ .Title }}"></td>
+                                    <td><a href="https://myanimelist.net/anime/{{ .AnimeID }}" target="_blank">{{ .Title }}</a></td>
+                                    <td>{{ .WatchedEpisodes }}/{{ .TotalEpisodes }}</td>
+                                </tr>
+                            {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="{{ .user2 }}moviemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ .user2 }} Movies Watched This Year</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                            {{ range .rawMovie2 }}
+                                <tr>
+                                    <td><img src="{{ .ImageLink }}" alt="{{ .Title }}"></td>
+                                    <td><a href="https://myanimelist.net/anime/{{ .AnimeID }}" target="_blank">{{ .Title }}</a></td>
+                                </tr>
+                            {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="{{ .user2 }}tvmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ .user2 }} Shows Watched This Year</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                            {{ range .rawTV2 }}
+                                <tr>
+                                    <td><img src="{{ .ImageLink }}" alt="{{ .Title }}"></td>
+                                    <td><a href="https://myanimelist.net/anime/{{ .AnimeID }}" target="_blank">{{ .Title }}</a></td>
+                                    <td>{{ .WatchedEpisodes }}/{{ .TotalEpisodes }}</td>
+                                </tr>
+                            {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="{{ .user2 }}ovamodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ .user2 }} OVAs Watched This Year</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                            {{ range .rawOVA2 }}
+                                <tr>
+                                    <td><img src="{{ .ImageLink }}" alt="{{ .Title }}"></td>
+                                    <td><a href="https://myanimelist.net/anime/{{ .AnimeID }}" target="_blank">{{ .Title }}</a></td>
+                                    <td>{{ .WatchedEpisodes }}/{{ .TotalEpisodes }}</td>
+                                </tr>
+                            {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -40,16 +218,16 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm">
-                        <p>{{ .user }} Movies watched: {{ .movieWatched }}</p>
-                        <p>{{ .user2 }} Movies watched: {{ .movieWatched2 }}</p>
+                        <p><a href="#" data-toggle="modal" data-target="#{{ .user }}moviemodal">{{ .user }} Movies watched: {{ .movieWatched }}</a></p>
+                        <p><a href="#" data-toggle="modal" data-target="#{{ .user2 }}moviemodal">{{ .user2 }} Movies watched: {{ .movieWatched2 }}</a></p>
                     </div>
                     <div class="col-sm">
-                        <p>{{ .user }} Episodes watched: {{ .sumTV }} ({{ .TVWatched }} shows)</p>
-                        <p>{{ .user2 }} Episodes watched: {{ .sumTV2 }} ({{ .TVWatched2 }} shows)</p>
+                        <p><a href="#" data-toggle="modal" data-target="#{{ .user }}tvmodal">{{ .user }} Episodes watched: {{ .sumTV }} ({{ .TVWatched }} shows)</a></p>
+                        <p><a href="#" data-toggle="modal" data-target="#{{ .user2 }}tvmodal">{{ .user2 }} Episodes watched: {{ .sumTV2 }} ({{ .TVWatched2 }} shows)</a></p>
                     </div>
                     <div class="col-sm">
-                        <p>{{ .user }} OVAs watched: {{ .sumOVA }} ({{ .OVAWatched }} OVAs/ONAs)</p>
-                        <p>{{ .user2 }} OVAs watched: {{ .sumOVA2 }} ({{ .OVAWatched2 }} OVAs/ONAs)</p>
+                        <p><a href="#" data-toggle="modal" data-target="#{{ .user }}ovamodal">{{ .user }} OVAs watched: {{ .sumOVA }} ({{ .OVAWatched }} OVAs/ONAs)</a></p>
+                        <p><a href="#" data-toggle="modal" data-target="#{{ .user2 }}ovamodal">{{ .user2 }} OVAs watched: {{ .sumOVA2 }} ({{ .OVAWatched2 }} OVAs/ONAs)</a></p>
                     </div>
                 </div>
             </div>

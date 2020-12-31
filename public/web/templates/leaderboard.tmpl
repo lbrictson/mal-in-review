@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h1>Current Leaderboard</h1>
+                <h1>Current 2020 Leaderboard</h1>
                 <h4>Board is updated whenever a review is generated</h4>
                 <table class="table table-bordered table-sm">
                     <tr class="table-primary d-flex">
@@ -17,7 +17,7 @@
                     <tr class="d-flex">
                         <th scope="row" class="col-1">{{ .ScoreRank }}</th>
                         <th scope="row" class="col-2">{{ .Score }}</th>
-                        <td class="col-9"><a target="_blank" href="/review/{{ .Username }}">{{ .Username }}</a>  <div class="float-right" style="display: block">(MAL: <a target="_blank" href="https://myanimelist.net/animelist/{{ .Username }}">Link</a>)</div></td>
+                        <td class="col-9"><a target="_blank" href="/review/{{ .Username }}">{{ .Username }}</a> <a class="btn btn-sm btn-primary float-right" style="display: block" href="https://myanimelist.net/animelist/{{ .Username }}" target="_blank"  role="button">View on MAL</a></td>
                     </tr>
                     {{ end }}
                     </tbody>
