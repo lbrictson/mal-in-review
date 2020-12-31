@@ -230,6 +230,7 @@
     </div>
     {{ template "footer" . }}
     <script>
+        setTimeout(function() {
         var ctx = document.getElementById('movies').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'bar',
@@ -253,8 +254,10 @@
                 }
             }
         });
+        }, 1000);
     </script>
     <script>
+        setTimeout(function() {
         var ctx = document.getElementById('episodes').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'bar',
@@ -278,8 +281,10 @@
                 }
             }
         });
+        }, 1000);
     </script>
     <script>
+        setTimeout(function() {
         var ctx = document.getElementById('ovas').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'bar',
@@ -303,5 +308,6 @@
                 }
             }
         });
+        }, 1000);
     </script>
 {{ end }}
