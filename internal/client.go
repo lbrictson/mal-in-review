@@ -2,13 +2,18 @@ package internal
 
 import (
 	"encoding/json"
+	"fmt"
+	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 )
 
 const animeDateString string = "01-02-06"
 const thisYear string = "01-01-21"
+const thisYearEuro string = "02-01-06"
 
 type CurrentlyWatchingResponseItem struct {
 	Status                int         `json:"status"`
@@ -83,8 +88,29 @@ func GetAll(username string) (UserData, error) {
 	current, _ := getCurrentlyWatching(username)
 	finished, _ := getFinishedWatching(username)
 	finishedWatchingThisYear := []FinishedWatchingResponseItem{}
+	usNumbering := true
+	logrus.Infof("Trying to determine if %v is us or euro", username)
+	// finish_date_string: "18-08-21",
+	for _, x := range finished {
+		nums := strings.Split(x.FinishDateString, "-")[0]
+		number, err := strconv.Atoi(nums)
+		if err == nil {
+			if number > 12 {
+				logrus.Info(number)
+				logrus.Infof("user %v is non US numbering", username)
+				usNumbering = false
+			}
+		}
+	}
+	logrus.Infof("%v is USnumber %v", username, usNumbering)
+	parseString := ""
+	if usNumbering == false {
+			parseString = thisYearEuro
+		} else {
+			parseString = animeDateString
+	}
 	for i, x := range finished {
-		t, err := time.Parse(animeDateString, x.FinishDateString)
+		t, err := time.Parse(parseString, x.FinishDateString)
 		if err == nil {
 			finished[i].FinishedWatchingDate = t
 			if finished[i].FinishedWatchingDate.UnixNano() >= thisYearTimed.UnixNano() {
@@ -138,5 +164,43 @@ func getFinishedWatching(username string) ([]FinishedWatchingResponseItem, error
 		return respData, err
 	}
 	err = json.Unmarshal(body, &respData)
+	more := false
+	offset := 300
+	if len(respData) == 300 {
+		more = true
+	}
+	for more {
+		logrus.Infof("looping to get more user data for %v on offset %v", username, offset)
+		loopRespData := []FinishedWatchingResponseItem{}
+		url := "https://myanimelist.net/animelist/" + username + fmt.Sprintf("/load.json?offset=%v?status=2", offset)
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			return respData, err
+		}
+		req.Header.Add("content-type", "application/json")
+		res, err := http.DefaultClient.Do(req)
+		if err != nil {
+			return respData, err
+		}
+		defer res.Body.Close()
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return respData, err
+		}
+		err = json.Unmarshal(body, &loopRespData)
+		if err != nil {
+			return respData, err
+		}
+		for _, x := range loopRespData {
+			respData = append(respData, x)
+		}
+		if len(loopRespData) == 300 {
+			offset = offset + 300
+		} else {
+			more = false
+			break
+		}
+	}
+	logrus.Infof("%v has %v finished items", username, len(respData))
 	return respData, err
 }

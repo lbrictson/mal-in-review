@@ -1,7 +1,9 @@
 package internal
 
 import (
+	"github.com/sirupsen/logrus"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -57,6 +59,19 @@ func generateUserStats(username string, data UserData) UserStats {
 	movies := []FinishedWatchingResponseItem{}
 	tvs := []FinishedWatchingResponseItem{}
 	ovas := []FinishedWatchingResponseItem{}
+	usNumbering := true
+	// Determine if non-us numbering
+	for _, x := range data.Finished {
+		nums := strings.Split(x.FinishDateString, "-")[0]
+		number, err := strconv.Atoi(nums)
+		if err != nil {
+			if number > 12 {
+				logrus.Info(number)
+				logrus.Infof("user %v is non US numbering", username)
+				usNumbering = false
+			}
+		}
+	}
 	for _, x := range data.Finished {
 		if len(movies) == 5 {
 			break
@@ -101,11 +116,15 @@ func generateUserStats(username string, data UserData) UserStats {
 	rawMovie := []Movie{}
 	rawTV := []TV{}
 	rawOVA := []OVA{}
+	monthSlice := 0
+	if !usNumbering {
+		monthSlice = 1
+	}
 	for _, x := range data.Finished {
 		switch x.AnimeMediaTypeString {
 		case "TV":
 			TVWatched = TVWatched + 1
-			switch strings.Split(x.FinishDateString, "-")[0] {
+			switch strings.Split(x.FinishDateString, "-")[monthSlice] {
 			case "01":
 				history.JanTV = history.JanTV + x.NumWatchedEpisodes
 			case "02":
@@ -133,7 +152,7 @@ func generateUserStats(username string, data UserData) UserStats {
 			}
 		case "OVA":
 			OVAWatched = OVAWatched + 1
-			switch strings.Split(x.FinishDateString, "-")[0] {
+			switch strings.Split(x.FinishDateString, "-")[monthSlice] {
 			case "01":
 				history.JanOVA = history.JanOVA + x.NumWatchedEpisodes
 			case "02":
@@ -161,7 +180,7 @@ func generateUserStats(username string, data UserData) UserStats {
 			}
 		case "Movie":
 			MovieWatched = MovieWatched + 1
-			switch strings.Split(x.FinishDateString, "-")[0] {
+			switch strings.Split(x.FinishDateString, "-")[monthSlice] {
 			case "01":
 				history.JanMovies = history.JanMovies + 1
 			case "02":
@@ -189,7 +208,7 @@ func generateUserStats(username string, data UserData) UserStats {
 			}
 		case "ONA":
 			OVAWatched = OVAWatched + 1
-			switch strings.Split(x.FinishDateString, "-")[0] {
+			switch strings.Split(x.FinishDateString, "-")[monthSlice] {
 			case "01":
 				history.JanOVA = history.JanOVA + x.NumWatchedEpisodes
 			case "02":
