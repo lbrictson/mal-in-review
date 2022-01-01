@@ -8,7 +8,7 @@ import (
 )
 
 const animeDateString string = "01-02-06"
-const thisYear string = "01-01-20"
+const thisYear string = "01-01-21"
 
 type CurrentlyWatchingResponseItem struct {
 	Status                int         `json:"status"`
